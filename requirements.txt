@@ -1,0 +1,8 @@
+setuptools
+wheel
+pydub
+pyaudio
+pocketsphinx
+SpeechRecognition
+dotenv
+textual
