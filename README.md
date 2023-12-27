@@ -36,11 +36,17 @@ TransTerm is an highly experimental text based graphical user interface to act o
 
 Being text based, this program runs even in the terminal.
 
+## Latest changelog
+
+Added experimental playlist folder support and playlist resume support.
+Please report any issues.
+
 ## Features
 
 - Download any youtube video at the highest resolution by default in mp4 format
 - Is able to automatically convert the downloaded video both in mp3 or wav format
 - Playlist support for the above features including automatically rename the files using the video title and the channel name
+- Playlists organization in folders with resume support (aka check if files are already there with the same title and channel)
 - Transcribe a ssingle downloaded video using either:
   • Google Audio to Text
   • Google Audio to Text + Silence detection

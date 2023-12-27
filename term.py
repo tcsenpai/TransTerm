@@ -14,6 +14,17 @@ forceQuit = False
 r = sr.Recognizer()
 
 
+# NOTE: WIP This method is intended to be called to check for the same file (by using slugified name)
+def existing(filename):
+    path_to_download_folder = (
+        str(os.path.dirname(os.path.realpath(__file__))) + "/downloads"
+    )
+    for file in os.listdir(path_to_download_folder):
+        if filename is file:
+            return True
+    return False
+
+
 # NOTE: Taken from https://stackoverflow.com/questions/295135/turn-a-string-into-a-valid-filename
 def slugify(value, allow_unicode=False):
     """
@@ -142,18 +153,26 @@ def managePlaylist(playlist, to_download=False, to_convert=False, named=True):
     if not to_download:
         return playlist
     counter = 0
+    normalized_title = slugify(playlist.title)
     path_to_download_folder = (
-        str(os.path.dirname(os.path.realpath(__file__))) + "/downloads"
+        str(os.path.dirname(os.path.realpath(__file__)))
+        + "/downloads/"
+        + normalized_title
     )
+    # Creating a folder for the playlist if it doesn't exist
+    if not os.path.isdir(path_to_download_folder):
+        os.mkdir(path_to_download_folder)
+    # Iterating and doing our job(s)
     for url in playlist:
         counter += 1
         print("Downloading video", counter, "of", len(playlist))
         ytvideo = YouTube(url)
+        filename = slugify(ytvideo.title + "_" + ytvideo.author)
+        # EXPERIMENTAL Skip if file already exists (aka resume playlist download)
+        if existing(filename):
+            print("File already exists: [" + filename + "]\nskipping...")
+            continue
         video = ytvideo.streams.get_highest_resolution()
-        filename = "video_" + str(counter)
-        # Experimental name support
-        if named:
-            filename = slugify(ytvideo.title + "_" + ytvideo.author)
         print("Downloading : ", filename)
         video.download(path_to_download_folder, filename=filename + ".mp4")
         if to_convert:
