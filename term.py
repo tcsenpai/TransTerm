@@ -153,6 +153,7 @@ def managePlaylist(playlist, to_download=False, to_convert=False, named=True):
     if not to_download:
         return playlist
     counter = 0
+    description = playlist.description
     normalized_title = slugify(playlist.title)
     path_to_download_folder = (
         str(os.path.dirname(os.path.realpath(__file__)))
@@ -162,6 +163,9 @@ def managePlaylist(playlist, to_download=False, to_convert=False, named=True):
     # Creating a folder for the playlist if it doesn't exist
     if not os.path.isdir(path_to_download_folder):
         os.mkdir(path_to_download_folder)
+    # Saving the description to a file as a courtesy
+    with open(path_to_download_folder + "/description.txt", "w") as f:
+        f.write(description)
     # Iterating and doing our job(s)
     for url in playlist:
         counter += 1
